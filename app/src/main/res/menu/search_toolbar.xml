@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--collapseActionView 代表当前MenuItem 点击的时候能够显示或者隐藏一个ActionView-->
+    <!--新版本v4包内部提供了SearchView点创建工具类，不需要使用actionViewClass属性了-->
+    <item android:id="@+id/action_search"
+        android:title="搜索"
+        app:showAsAction="always|collapseActionView"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        />
+
+</menu>
