@@ -47,7 +47,7 @@ public class MyClient {
             JSONArray array = new JSONArray(stringBuilder.toString());
             return array;
         }catch (java.net.ConnectException e){
-            System.out.println("connectionFailed");
+//            System.out.println("connectionFailed");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {

@@ -53,7 +53,7 @@ public class SQLiteServer extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREAT_BOOK);
         db.execSQL(CREAT_MARK);
-        System.out.println("databse created");
+//        System.out.println("databse created");
     }
 
     @Override
@@ -111,7 +111,7 @@ public class SQLiteServer extends SQLiteOpenHelper {
     }
 
     public ArrayList<News> queryData(SQLiteDatabase database, String channel){
-        System.out.println("query: " + channel);
+//        System.out.println("query: " + channel);
         ArrayList<News> newsList = new ArrayList<>();
         String arg3 = "channel = ?";
         String[] arg4 = new String[]{channel};
@@ -132,7 +132,7 @@ public class SQLiteServer extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
         }
         cursor.close();
-        System.out.println("endquery");
+//        System.out.println("endquery");
         return newsList;
     }
 
@@ -163,7 +163,7 @@ public class SQLiteServer extends SQLiteOpenHelper {
     }
 
     public ArrayList<News> queryMark(SQLiteDatabase database){
-        System.out.println("queryMark: ");
+//        System.out.println("queryMark: ");
         ArrayList<News> newsList = new ArrayList<>();
         Cursor cursor = database.query(mark, null, null, null, null, null, "id");
         if(cursor.moveToFirst()){
@@ -178,9 +178,9 @@ public class SQLiteServer extends SQLiteOpenHelper {
         }
         cursor.close();
         for (News news : newsList) {
-            System.out.println(news.channel + " " + news.visited + " " + news.title);
+//            System.out.println(news.channel + " " + news.visited + " " + news.title);
         }
-        System.out.println("endquery");
+//        System.out.println("endquery");
         return newsList;
     }
 

@@ -108,13 +108,13 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     private void searchNews(final String keyword){
-        System.out.println("search");
+//        System.out.println("search");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("search start");
+//                System.out.println("search start");
                 final JSONArray array = myClient.search(keyword);
-                System.out.println("request finished");
+//                System.out.println("request finished");
 //                try {
 //                    Thread.sleep(1000);
 //                } catch (InterruptedException e) {
@@ -124,7 +124,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                     runOnUiThread(new Runnable() {// return back to main thread UI
                         @Override
                         public void run() {
-                            System.out.println("now in UIThread");
+//                            System.out.println("now in UIThread");
                             //do http things to load refreshing news
                             //newsAdapter.notifyDataSetChanged();
                             newsList.clear();

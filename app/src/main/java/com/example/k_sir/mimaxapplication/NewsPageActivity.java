@@ -149,9 +149,9 @@ public class NewsPageActivity extends AppCompatActivity implements EasyPermissio
 
     public static String getNewContent(String htmltext){
         try {
-            System.out.println(htmltext);
+//            System.out.println(htmltext);
             Document doc= Jsoup.parse(htmltext);
-            System.out.println(doc.toString());
+//            System.out.println(doc.toString());
             Elements elements=doc.getElementsByTag("img");
             for (Element element : elements) {
                 element.attr("width","100%").attr("height","auto");
@@ -159,7 +159,7 @@ public class NewsPageActivity extends AppCompatActivity implements EasyPermissio
                 String imgUrl = element.attr("src");
                 element.attr("src", processingImgUrl(imgUrl));
             }
-            System.out.println(doc.toString());
+//            System.out.println(doc.toString());
             return doc.toString();
         } catch (Exception e) {
             return htmltext;
@@ -210,9 +210,9 @@ public class NewsPageActivity extends AppCompatActivity implements EasyPermissio
         }
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        System.out.println(imageString);
+//        System.out.println(imageString);
         Uri uri = storeImg(imageString);
-        System.out.println(uri);
+//        System.out.println(uri);
         if(uri != null) {
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
             shareIntent.setType("image/*");
@@ -282,7 +282,7 @@ public class NewsPageActivity extends AppCompatActivity implements EasyPermissio
 
     }
     private Uri storeBitmap(Bitmap bitmap){
-        System.out.println(bitmap);
+//        System.out.println(bitmap);
         if (bitmap == null)
             return null;
         String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/news/";

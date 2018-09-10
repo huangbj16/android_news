@@ -63,7 +63,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(@NonNull NewsAdapter.ViewHolder viewHolder, int i) {
-        System.out.println("onBindViewHolder");
+//        System.out.println("onBindViewHolder");
         News news = newsList.get(i);
         viewHolder.newsTitle.setText(news.title);
         viewHolder.itemView.setTag(i);

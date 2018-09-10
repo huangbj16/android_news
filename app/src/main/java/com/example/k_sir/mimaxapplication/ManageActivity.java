@@ -42,8 +42,8 @@ public class ManageActivity extends AppCompatActivity {
             if(!chosenList.contains(allChannels[i]))
                 notChosenList.add(allChannels[i]);
         }
-        System.out.println(chosenList);
-        System.out.println(notChosenList);
+//        System.out.println(chosenList);
+//        System.out.println(notChosenList);
 
         chosenView = (RecyclerView) findViewById(R.id.chosen_recycle);
         notChosenView = (RecyclerView) findViewById(R.id.not_chosen_recycle);

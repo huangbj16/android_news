@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                System.out.println("start");
+//                System.out.println("start");
                 refreshNews();
                 recyclerView.scrollToPosition(0);
                 //swipeRefreshLayout.setRefreshing(false);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         singleNews.visited = true;
                         if (sqLiteServer.updateData(database, singleNews.content, singleNews.title)) {
                             System.out.println("update visited news");
-                            System.out.println(sqLiteServer.checkVisited(database, singleNews.title));
+//                            System.out.println(sqLiteServer.checkVisited(database, singleNews.title));
                         } else
                             System.out.println("update failed" + singleNews.title);
                     }
@@ -202,18 +202,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String processingContent(String content){
-        System.out.println(content);
+//        System.out.println(content);
         return content;
     }
 
     private void refreshNews() {
-        System.out.println("refresh");
+//        System.out.println("refresh");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("refresh start");
+//                System.out.println("refresh start");
                 final JSONArray array = myClient.refresh(currentChannel);
-                System.out.println("request finished");
+//                System.out.println("request finished");
 //                try {
 //                    Thread.sleep(1000);
 //                } catch (InterruptedException e) {
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {// return back to main thread UI
                         @Override
                         public void run() {
-                            System.out.println("now in UIThread");
+//                            System.out.println("now in UIThread");
                             //do http things to load refreshing news
                             //newsAdapter.notifyDataSetChanged();
                             newsList.clear();
@@ -255,8 +255,8 @@ public class MainActivity extends AppCompatActivity {
                                 if(sqLiteServer.insertData(database, singleNews.title, null, singleNews.imgUrl, singleNews.resource, false, currentChannel))
                                     System.out.println("insertSuccess");
                                 else {
-                                    System.out.println("insertFailed");
-                                    System.out.println("check if visited");
+//                                    System.out.println("insertFailed");
+//                                    System.out.println("check if visited");
                                     if(sqLiteServer.checkVisited(database, singleNews.title))
                                         singleNews.visited = true;
                                 }
@@ -268,11 +268,11 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
                 else{//connection failed
-                    System.out.println("uselocaldata");
+//                    System.out.println("uselocaldata");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println(currentChannel);
+//                            System.out.println(currentChannel);
                             newsList.clear();
                             ArrayList<News> tempList = sqLiteServer.queryData(database, currentChannel);
 //                            newsList = tempList;
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                             swipeRefreshLayout.setRefreshing(false);
                         }
                     });
-                    System.out.println("localquerysuccess");
+//                    System.out.println("localquerysuccess");
                 }
             }
         }).start();
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initNews(){
-        System.out.println("init");
+//        System.out.println("init");
         currentChannel = "国内新闻";
 //        newsList = loadNewsListFromCache(MainActivity.this, currentChannel);
         refreshNews();
@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void transferToSearch(){
-        System.out.println("transfer");
+//        System.out.println("transfer");
         Intent intent = new Intent();
         intent.setClass(MainActivity.this, SearchActivity.class);
         startActivity(intent);

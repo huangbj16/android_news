@@ -64,7 +64,7 @@ public class CollectionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 10 && resultCode == 99){
-            System.out.println("mark changed");
+//            System.out.println("mark changed");
             newsList.clear();
             List<News> tempList = sqLiteServer.queryMark(database);
             for (News news : tempList) {
