@@ -1,6 +1,7 @@
 package com.example.k_sir.mimaxapplication;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -32,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.SQLData;
 
 public class NewsPageActivity extends AppCompatActivity{
 
@@ -44,6 +46,10 @@ public class NewsPageActivity extends AppCompatActivity{
     String titleString = "Default";
     String imageString = "http://rss.people.com.cn/img/2014peoplelogo/rss_logo.gif";
     String description = "Default";
+    String resource = "Default";
+    String channel = "Default";
+    SQLiteServer server;
+    SQLiteDatabase database;
 
     class MyWebClient extends WebViewClient {
         @Override
@@ -65,6 +71,8 @@ public class NewsPageActivity extends AppCompatActivity{
             titleString = obj.getString("title");
             description = obj.getString("content");
             imageString = obj.getString("imgUrl");
+            resource = obj.getString("resource");
+            channel = obj.getString("channel");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -85,7 +93,7 @@ public class NewsPageActivity extends AppCompatActivity{
         WebSettings settings = webView.getSettings();
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);//把html中的内容放大webview等宽的一列中
         settings.setJavaScriptEnabled(true);//支持js
-        webView.loadDataWithBaseURL(null, getNewContent(description), null, null, null);
+        webView.loadDataWithBaseURL(null, getNewContent(description), "text/html", "utf-8", null);
         webView.setWebViewClient(new MyWebClient());
     }
 
@@ -113,6 +121,7 @@ public class NewsPageActivity extends AppCompatActivity{
         switch (item.getItemId()){
             case R.id.collect:
                 Toast.makeText(this, "Add to Collection", Toast.LENGTH_SHORT).show();
+                mark();
                 break;
             case R.id.share:
                 Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
@@ -144,5 +153,7 @@ public class NewsPageActivity extends AppCompatActivity{
         startActivity(Intent.createChooser(shareIntent, "分享"));
     }
 
-
+    private void mark(){
+        return;
+    }
 }

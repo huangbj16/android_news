@@ -1,6 +1,7 @@
 package com.example.k_sir.mimaxapplication;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +20,7 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> implements View.OnClickListener{
     private Context mContext;
     private List<News> newsList;
-
+    public ViewHolder viewHolder;
     @Override
     public void onClick(View v) {
         if(onItemClickListener != null){
@@ -62,10 +63,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(@NonNull NewsAdapter.ViewHolder viewHolder, int i) {
+        System.out.println("onBindViewHolder");
         News news = newsList.get(i);
         viewHolder.newsTitle.setText(news.title);
         viewHolder.itemView.setTag(i);
         Glide.with(mContext).load(news.imgUrl).into(viewHolder.newsImage);
+        if(news.visited)
+            viewHolder.newsTitle.setTextColor(Color.rgb(127, 127, 127));
+        else
+            viewHolder.newsTitle.setTextColor(Color.rgb(0,0,0));
     }
 
     @Override

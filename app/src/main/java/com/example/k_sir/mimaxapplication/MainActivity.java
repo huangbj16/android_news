@@ -3,6 +3,7 @@ package com.example.k_sir.mimaxapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcel;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
 
-    News single_news = new News("title", "content", "https://inews.gtimg.com/newsapp_bt/0/5127055360/1000", "qq", "新闻");
+//    News single_news = new News("title", "content", "https://inews.gtimg.com/newsapp_bt/0/5127055360/1000", "qq", "新闻");
 
     private News[] news = new News[20];
 
@@ -68,12 +69,15 @@ public class MainActivity extends AppCompatActivity {
     private MyClient myClient;
     private GridLayoutManager layoutManager;
     private RecyclerView recyclerView;
-
+    private SQLiteServer sqLiteServer;
+    private SQLiteDatabase database;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sqLiteServer = new SQLiteServer(getApplicationContext(), "news", null, 6);
+        database = sqLiteServer.getWritableDatabase();
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -99,11 +103,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 News singleNews = newsList.get(position);
+                if(singleNews.content != null) {//null means visit from local without internet access
+                    if (singleNews.visited == false) {
+                        singleNews.visited = true;
+                        if (sqLiteServer.updateData(database, singleNews.content, singleNews.title)) {
+                            System.out.println("update visited news");
+                            System.out.println(sqLiteServer.checkVisited(database, singleNews.title));
+                        } else
+                            System.out.println("update failed" + singleNews.title);
+                    }
 //                Toast.makeText(MainActivity.this, singleNews.content, Toast.LENGTH_SHORT).show();
-                /////////////////open another activity for single news
-                Intent intent = new Intent(MainActivity.this, NewsPageActivity.class);
-                intent.putExtra("content", singleNews.convertToString());
-                startActivity(intent);
+                    /////////////////open another activity for single news
+                    Intent intent = new Intent(MainActivity.this, NewsPageActivity.class);
+                    intent.putExtra("content", singleNews.convertToString());
+                    startActivity(intent);
+                    newsAdapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -192,7 +207,15 @@ public class MainActivity extends AppCompatActivity {
                                     String content = obj.getString("description");
                                     String imgURL = obj.getString("imgUrl");
                                     String resource = obj.getString("link");
-                                    News singleNews = new News(title, content, imgURL, resource, currentChannel);
+                                    News singleNews = new News(title, content, imgURL, resource, currentChannel, false);
+//                                    if(sqLiteServer.insertData(database, title, null, imgURL, resource, false, currentChannel))
+//                                        System.out.println("insertSuccess");
+//                                    else {
+//                                        System.out.println("insertFailed");
+//                                        System.out.println("check if visited");
+//                                        if(sqLiteServer.checkVisited(database, title))
+//                                            singleNews.visited = true;
+//                                    }
                                     newsList.add(singleNews);
                                     if(newsList.size() == 50)
                                         break;
@@ -200,11 +223,45 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
+                            for (int i = newsList.size() - 1; i >= 0; i--) {//insert according to date
+                                News singleNews = newsList.get(i);
+                                if(sqLiteServer.insertData(database, singleNews.title, null, singleNews.imgUrl, singleNews.resource, false, currentChannel))
+                                    System.out.println("insertSuccess");
+                                else {
+                                    System.out.println("insertFailed");
+                                    System.out.println("check if visited");
+                                    if(sqLiteServer.checkVisited(database, singleNews.title))
+                                        singleNews.visited = true;
+                                }
+                            }
                             newsAdapter.notifyDataSetChanged();
                             swipeRefreshLayout.setRefreshing(false);
 //                            storeNewsListInCache(MainActivity.this, newsList, currentChannel);
                         }
                     });
+                }
+                else{//connection failed
+                    System.out.println("uselocaldata");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println(currentChannel);
+                            newsList.clear();
+                            ArrayList<News> tempList = sqLiteServer.queryData(database, currentChannel);
+//                            newsList = tempList;
+//                            for (News news1 : newsList) {
+//                                System.out.println(news1.title + " " + news1.channel);
+//                            }
+                            for (int i = tempList.size() - 1; i >= 0; i--) {
+                                newsList.add(tempList.get(i));
+                                if(newsList.size() == 50)
+                                    break;
+                            }
+                            newsAdapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+                    System.out.println("localquerysuccess");
                 }
             }
         }).start();
@@ -216,10 +273,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("init");
         currentChannel = "国内新闻";
 //        newsList = loadNewsListFromCache(MainActivity.this, currentChannel);
-        if(newsList.isEmpty()) {
-            System.out.println("empty");
-            refreshNews();
-        }
+        refreshNews();
     }
 
     @Override

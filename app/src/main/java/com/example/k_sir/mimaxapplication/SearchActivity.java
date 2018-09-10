@@ -37,7 +37,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         setSupportActionBar(toolbar);
 
-        newsList.add(new News("abc", "", "", "", ""));
+//        newsList.add(new News("abc", "", "", "", ""));
         recyclerView = (RecyclerView) findViewById(R.id.search_recycle);
         layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
@@ -135,7 +135,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                                     String content = obj.getString("description");
                                     String imgURL = obj.getString("imgUrl");
                                     String resource = obj.getString("link");
-                                    News singleNews = new News(title, content, imgURL, resource, "search channel");
+                                    boolean visited = false;
+                                    News singleNews = new News(title, content, imgURL, resource, "search channel", false);
                                     newsList.add(singleNews);
                                     if(newsList.size() == 50)
                                         break;
