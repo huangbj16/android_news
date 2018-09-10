@@ -38,6 +38,9 @@
         <activity android:name=".CollectionActivity"
             android:label="收藏">
         </activity>
+        <activity android:name=".RecommendActivity"
+            android:label="推荐">
+        </activity>
     </application>
 
 </manifest>

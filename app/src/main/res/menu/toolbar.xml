@@ -10,6 +10,12 @@
         <!--app:showAsAction="ifRoom" />-->
 
     <item
+        android:id="@+id/recommend"
+        android:icon="@drawable/ic_dashboard_white_24dp"
+        android:title="Recommend"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/search"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="Search"

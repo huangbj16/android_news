@@ -5,7 +5,7 @@
         <item
             android:id="@+id/nav_colletion"
             android:icon="@drawable/ic_collections_bookmark_white_24dp"
-            android:title="Collection" />
+            android:title="收藏" />
 
     </group>
 </menu>

@@ -1,6 +1,7 @@
 package com.example.k_sir.mimaxapplication;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -21,7 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class RecommendActivity extends AppCompatActivity{
     private Toolbar toolbar;
     private SearchView searchView;
     List<News> newsList = new ArrayList<>();
@@ -29,16 +30,20 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     GridLayoutManager layoutManager;
     RecyclerView recyclerView;
     MyClient myClient;
-
+    SQLiteServer sqLiteServer;
+    SQLiteDatabase database;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        toolbar = (Toolbar) findViewById(R.id.search_toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_recommend);
+
+        Intent intent = getIntent();
+        String keyword = intent.getStringExtra("recommend word");
+
+        searchNews(keyword);
 
 //        newsList.add(new News("abc", "", "", "", ""));
-        recyclerView = (RecyclerView) findViewById(R.id.search_recycle);
+        recyclerView = (RecyclerView) findViewById(R.id.recommend_recycle);
         layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
         newsAdapter = new NewsAdapter(newsList);
@@ -46,65 +51,32 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         myClient = new MyClient();
 
+        sqLiteServer = SQLiteServer.getInstance();
+        database = sqLiteServer.getWritableDatabase();
+
+        toolbar = (Toolbar) findViewById(R.id.recommend_toolbar);
+        setSupportActionBar(toolbar);
+
         newsAdapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 News singleNews = newsList.get(position);
-//                Toast.makeText(MainActivity.this, singleNews.content, Toast.LENGTH_SHORT).show();
-                /////////////////open another activity for single news
-                Intent intent = new Intent(SearchActivity.this, NewsPageActivity.class);
-                intent.putExtra("content", singleNews.convertToString());
-                startActivity(intent);
+                if(singleNews.content != null) {//null means visit from local without internet access
+                    if (singleNews.visited == false) {
+                        singleNews.visited = true;
+                        if (sqLiteServer.updateData(database, singleNews.content, singleNews.title)) {
+                            System.out.println("update visited news");
+                            System.out.println(sqLiteServer.checkVisited(database, singleNews.title));
+                        } else
+                            System.out.println("update failed" + singleNews.title);
+                    }
+                    Intent intent = new Intent(RecommendActivity.this, NewsPageActivity.class);
+                    intent.putExtra("content", singleNews.convertToString());
+                    startActivity(intent);
+                    newsAdapter.notifyDataSetChanged();
+                }
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_toolbar, menu);
-
-        //设置搜索输入框的步骤
-
-        //1.查找指定的MemuItem
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-
-      /*  //2.设置SearchView v4 包方式
-        View view = SearchViewCompat.newSearchView(this);
-//        menuItem.setActionView(view);
-        MenuItemCompat.setActionView(menuItem, view);*/
-
-        //2.设置SearchView v7包方式
-        View view = MenuItemCompat.getActionView(menuItem);
-        if (view != null) {
-            searchView = (SearchView) view;
-            //4.设置SearchView 的查询回调接口
-            searchView.setOnQueryTextListener(this);
-
-            //在搜索输入框没有显示的时候 点击Action ,回调这个接口，并且显示输入框
-//            searchView.setOnSearchClickListener();
-            //当自动补全的内容被选中的时候回调接口
-//            searchView.setOnSuggestionListener();
-
-            //可以设置搜索的自动补全，或者实现搜索历史
-//            searchView.setSuggestionsAdapter();
-
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String s) {
-//        Toast.makeText(SearchActivity.this, "Submit" + s, Toast.LENGTH_SHORT).show();
-        searchView.clearFocus();
-        searchNews(s);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-//        Toast.makeText(SearchActivity.this, "" + s, Toast.LENGTH_SHORT).show();
-        searchNews(s);
-        return true;
     }
 
     private void searchNews(final String keyword){

@@ -197,7 +197,7 @@ public class NewsPageActivity extends AppCompatActivity implements EasyPermissio
                     setResult(Activity.RESULT_OK);//not changed
                 break;
             case R.id.share:
-                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
                 shareToOther();
                 break;
         }

@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteServer sqLiteServer;
     private SQLiteDatabase database;
     private NavigationView navView;
+    private String recommendKeyword = "习近平";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View view, int position) {
                 News singleNews = newsList.get(position);
                 if(singleNews.content != null) {//null means visit from local without internet access
+                    recommendKeyword = singleNews.title.substring(0, 2);
                     if (singleNews.visited == false) {
                         singleNews.visited = true;
                         if (sqLiteServer.updateData(database, singleNews.content, singleNews.title)) {
@@ -321,12 +323,21 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(this, "manage", Toast.LENGTH_SHORT).show();
                 manageChannel();
                 break;
+            case R.id.recommend:
+                gotoRecommendation();
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
             default:
         }
         return true;
+    }
+
+    private void gotoRecommendation(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, RecommendActivity.class);
+        intent.putExtra("recommend word", recommendKeyword);
+        startActivity(intent);
     }
 
     private void transferToSearch(){
