@@ -30,12 +30,24 @@ public class SQLiteServer extends SQLiteOpenHelper {
     private Context mContext;
     private String table = "news_table";
     private String mark = "mark_table";
-    public SQLiteServer(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+
+    private static SQLiteServer singleton = null;
+
+    private SQLiteServer(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
-        this.mContext = mContext;
+        this.mContext = context;
     }
 
-//    static SQLiteServer getInstance
+    public static SQLiteServer getInstance(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        if(singleton == null)
+            singleton = new SQLiteServer(context, name, factory, version);
+        return singleton;
+    }
+
+    public static SQLiteServer getInstance() {
+        return singleton;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -139,6 +151,17 @@ public class SQLiteServer extends SQLiteOpenHelper {
             return false;
     }
 
+    public boolean checkMarked(SQLiteDatabase database, String title){
+        ArrayList<News> newsList = new ArrayList<>();
+        String arg3 = "title = ?";
+        String[] arg4 = new String[]{title};
+        Cursor cursor = database.query(mark, null, arg3, arg4, null, null, null);
+        if(cursor.getCount() == 0)
+            return false;
+        else
+            return true;
+    }
+
     public ArrayList<News> queryMark(SQLiteDatabase database){
         System.out.println("queryMark: ");
         ArrayList<News> newsList = new ArrayList<>();
@@ -159,5 +182,11 @@ public class SQLiteServer extends SQLiteOpenHelper {
         }
         System.out.println("endquery");
         return newsList;
+    }
+
+    public boolean deleteMark(SQLiteDatabase database, String title){
+        if(database.delete(mark, "title = ?", new String[]{title}) != 0)
+            return true;
+        return false;
     }
 }

@@ -11,6 +11,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -71,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SQLiteServer sqLiteServer;
     private SQLiteDatabase database;
+    private NavigationView navView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sqLiteServer = new SQLiteServer(getApplicationContext(), "news", null, 6);
+        sqLiteServer = SQLiteServer.getInstance(getApplicationContext(), "news", null, 6);
         database = sqLiteServer.getWritableDatabase();
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -167,6 +169,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        navView = (NavigationView) findViewById(R.id.nav_view);
+//        navView.setCheckedItem(R.id.nav_colletion);
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, CollectionActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.support_simple_spinner_dropdown_item, data);
 //        final ListView listView = (ListView) findViewById(R.id.list_view);
 //        listView.setAdapter(adapter);
@@ -177,6 +191,17 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
 //            }
 //        });
+    }
+
+    private static String processingImgUrl(String imgUrl){
+        if(!imgUrl.startsWith("http"))
+            imgUrl = "http://www.people.com.cn" + imgUrl;
+        return imgUrl;
+    }
+
+    private String processingContent(String content){
+        System.out.println(content);
+        return content;
     }
 
     private void refreshNews() {
@@ -204,8 +229,8 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     JSONObject obj = (JSONObject) array.get(i);
                                     String title = obj.getString("title");
-                                    String content = obj.getString("description");
-                                    String imgURL = obj.getString("imgUrl");
+                                    String content = processingContent(obj.getString("description"));
+                                    String imgURL = processingImgUrl(obj.getString("imgUrl"));
                                     String resource = obj.getString("link");
                                     News singleNews = new News(title, content, imgURL, resource, currentChannel, false);
 //                                    if(sqLiteServer.insertData(database, title, null, imgURL, resource, false, currentChannel))
