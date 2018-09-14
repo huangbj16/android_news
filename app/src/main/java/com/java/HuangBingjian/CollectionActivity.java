@@ -1,6 +1,5 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
+
+import com.java.HuangBingjian.mimaxapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;

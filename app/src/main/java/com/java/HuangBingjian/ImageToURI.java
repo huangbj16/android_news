@@ -1,4 +1,4 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian;
 
 import android.content.Context;
 import android.content.Intent;

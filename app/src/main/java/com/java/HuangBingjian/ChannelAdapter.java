@@ -1,4 +1,4 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.java.HuangBingjian.mimaxapplication.R;
+
 import java.util.List;
 
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHolder> implements View.OnClickListener{

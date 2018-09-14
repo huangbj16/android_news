@@ -1,4 +1,4 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian;
 
 import java.io.BufferedReader;
 import java.io.IOException;

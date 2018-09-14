@@ -1,4 +1,4 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian.mimaxapplication;
 
 import org.junit.Test;
 

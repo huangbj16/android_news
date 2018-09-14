@@ -1,4 +1,4 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,9 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.java.HuangBingjian.mimaxapplication.R;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> implements View.OnClickListener{

@@ -1,4 +1,4 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian.mimaxapplication;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

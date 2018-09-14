@@ -1,24 +1,19 @@
-package com.example.k_sir.mimaxapplication;
+package com.java.HuangBingjian;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.java.HuangBingjian.mimaxapplication.R;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.System.exit;
 
 public class ManageActivity extends AppCompatActivity {
     RecyclerView chosenView, notChosenView;
